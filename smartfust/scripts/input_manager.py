@@ -1,7 +1,7 @@
-from pygame import event, MOUSEBUTTONUP, KEYDOWN, mouse, K_LEFT, K_RIGHT, K_UP, K_DOWN, K_BACKSPACE, K_RETURN
+from pygame import event, MOUSEBUTTONUP, KEYDOWN, mouse, K_LEFT, K_RIGHT, K_UP, K_DOWN, K_BACKSPACE, K_RETURN, key, QUIT
 
 # Events
-QUIT = 1
+EXIT = 1
 LEFTCLICK_DOWN = 2
 LEFTCLICK_UP = 3
 RIGHTCLICK_DOWN = 4
@@ -25,7 +25,7 @@ class InputManager:
         self.events[KEYS] = []
         for e in event.get():
             if e.type == QUIT:
-                self.events[QUIT] = True
+                self.events[EXIT] = True
             if e.type == MOUSEBUTTONUP:
                 if e.button == 1:
                     self.events[LEFTCLICK_UP] = e.pos
@@ -53,8 +53,8 @@ class InputManager:
         }
 
         keys = key.get_pressed()
-        for key, value in desired_keys.items():
-            if keys[key]:
+        for k, value in desired_keys.items():
+            if keys[k]:
                 self.events[value] = True
         
         return self.events

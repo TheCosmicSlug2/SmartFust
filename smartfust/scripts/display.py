@@ -1,5 +1,5 @@
 from pygame import display
-from smartfust.scripts.input_manager import InputManager, QUIT
+from smartfust.scripts.input_manager import InputManager, EXIT
 from smartfust.scripts.renderer import Renderer
 from smartfust.scripts.wgs.widgets_manager import WidgetManager
 from smartfust.scripts.wgs.widgets import Button, Checkbox, Entry, List, Slider, Widget
@@ -36,7 +36,7 @@ class Display:
             # Get input
             events = input_manager.get_events()
 
-            if QUIT in events:
+            if EXIT in events:
                 self.output_code = GLOBAL_QUIT
                 running = False
             

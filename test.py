@@ -1,7 +1,7 @@
 import smartfust as sf
 
 
-texture1 = sf.load_texture(r"C:\Users\Eleve\Pictures\Screenshots\Capture d’écran (4562).png", smoothscale=0.1)
+texture1 = sf.load_texture(r"smartfust/rsc/celeste.png", smoothscale=0.1)
 
 dic = {
     0: sf.Label((100, 50), (60, 30), "Label", (0, 0, 0), colors=[(0, 255, 255), (255, 255, 0)], text_height=15),
@@ -14,7 +14,7 @@ dic = {
 }
 display = sf.Display(dims=(600, 400), title="Hello")
 display.add_widgets(dic)
-display.set_bg("custom", array=[[(0 + i)%3, (1 + i)%3, (2+i)%3] * 10 for i in range(30)], colors=((255, 0, 0), (0, 255, 0), (0, 0, 255)), shadow={"sign": (-10, 10),"mult": 3})
+display.set_bg("custom", array=[[(0 + i)%3, (1 + i)%3, (2+i)%3] * 10 for i in range(30)], colors=((255, 0, 0), (0, 255, 0), (0, 0, 255)), shadow={"sign": (-1, 1),"mult": 10})
 display.mainloop()
 
 outputs = display.get_output()
