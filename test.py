@@ -14,12 +14,7 @@ dic = {
 }
 display = sf.Display(dims=(600, 400), title="Hello")
 display.add_widgets(dic)
-#display.set_font("times new roman")
-#dims = (randint(10, 20), randint(10, 20))
-display.set_bg("rgb", colors=(255, 0, 0))
-#array = [[randint(0, 1) for _ in range(dims[0])] for _ in range(dims[1])]
-#display.renderer.set_bg("chessboard", dims=(50, 50), colors=((255, 255, 255), (0, 0, 0)))#, #shadow={"sign": (0, 1), "mult": 10})
-#display.set_bg("custom", array=[[(0 + i)%3, (1 + i)%3, (2+i)%3] * 10 for i in range(30)], colors=((255, 0, 0), (0, 255, 0), (0, 0, 255)), shadow={"sign": (-10, 10),"mult": 3})
+display.set_bg("custom", array=[[(0 + i)%3, (1 + i)%3, (2+i)%3] * 10 for i in range(30)], colors=((255, 0, 0), (0, 255, 0), (0, 0, 255)), shadow={"sign": (-10, 10),"mult": 3})
 display.mainloop()
 
 outputs = display.get_output()
