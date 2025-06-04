@@ -19,7 +19,7 @@ class InputManager:
     def __init__(self):
         self.events = {}
         self.last_events = {}
-    
+
     def get_events(self):
         # Pygame events
         self.events[KEYS] = []
@@ -34,7 +34,7 @@ class InputManager:
             if e.type == KEYDOWN:
                 if e.unicode:
                     self.events[KEYS] = e.unicode
-        
+
         # Mouse pos and click
         mouse_pressed = mouse.get_pressed()
         if mouse_pressed[0]:
@@ -42,7 +42,7 @@ class InputManager:
         if mouse_pressed[2]:
             self.events[RIGHTCLICK_DOWN] = True
         self.events[MOUSE_POS] = mouse.get_pos()
-        
+
         desired_keys = {
             K_LEFT: LEFT,
             K_RIGHT: RIGHT,
@@ -56,7 +56,7 @@ class InputManager:
         for k, value in desired_keys.items():
             if keys[k]:
                 self.events[value] = True
-        
+
         return self.events
 
     def set_last_events(self):

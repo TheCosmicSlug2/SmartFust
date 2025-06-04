@@ -16,15 +16,15 @@ class Renderer:
             "hand": cursors.Cursor(SYSTEM_CURSOR_HAND)
         }
 
-    def set_bg(self, type, dims, colors, array, shadow) -> None:        
+    def set_bg(self, _type, dims, colors, array, shadow) -> None:
         self.bg = Surface(self.SCREEN.get_size())
-        if type == "rgb":
+        if _type == "rgb":
             self.bg.fill(colors)
-        if type == "chessboard":
+        if _type == "chessboard":
             # Create array
             array = [[(column + row) % 2 for column in range(dims[0])] for row in range(dims[1])]
-        
-        if type in ("custom", "chessboard"):
+
+        if _type in ("custom", "chessboard"):
             dims = (len(array[0]), len(array))
             cell_width = self.SCREEN.get_width() // dims[0]
             cell_height = self.SCREEN.get_height() // dims[1]
@@ -36,12 +36,12 @@ class Renderer:
             for row_idx, row in enumerate(array):
                 for column_idx, column in enumerate(row):
                     color = dic[column]
-                    
+
                     from_center_x = abs(dims[1] // 2 - column_idx)
                     from_center_y = abs(dims[0] // 2 - row_idx)
                     dcolor = shadow_mult * (from_center_x * dx + from_center_y * dy)
                     color = clamp_rgb_add(color, dcolor)
-                    
+
                     rect = Rect(column_idx * cell_width, row_idx * cell_height, cell_width, cell_height)
                     draw.rect(self.bg, color, rect)
 
@@ -49,7 +49,7 @@ class Renderer:
     def update_cursor(self, widget: Widget) -> None:
         if isinstance(widget, Entry):
             mouse.set_cursor(self.cursors["ibeam"])
-        elif isinstance(widget, Button) or isinstance(widget, Checkbox):
+        elif isinstance(widget, (Button, Checkbox)):
             mouse.set_cursor(self.cursors["hand"])
         else:
             mouse.set_cursor(self.cursors["arrow"])
@@ -62,7 +62,7 @@ class Renderer:
             self.SCREEN.blit(widget.surface, widget.pos)
             if isinstance(widget, AddonWidget) and (not isinstance(widget, List) or widget.list_shown):
                 self.SCREEN.blit(widget.addon_surface, widget.addon_pos)
-    
+
     def update(self) -> None:
         display.flip()
         self.clock.tick(self.FPS)

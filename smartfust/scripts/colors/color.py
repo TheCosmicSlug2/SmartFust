@@ -8,7 +8,7 @@ def clamp_rgb(rgb):
 def clamp_rgb_add(rgb, value):
     r, g, b = rgb
     r += value
-    g += value 
+    g += value
     b += value
     return clamp_rgb((r, g, b))
 
@@ -19,18 +19,18 @@ class Color:
             self.a = 255
         else:
             self.r, self.g, self.b, self.a = rgba
-    
+
     @property
     def rgba(self):
         return (self.r, self.g, self.b, self.a)
-    
+
     @property
     def rgb(self):
         return (self.r, self.g, self.b)
-    
+
     def add(self, value):
         self.r, self.g, self.b = clamp_rgb_add(self.rgb, value)
-    
+
     def invert(self):
         self.r = 255 - self.r
         self.g = 255 - self.g

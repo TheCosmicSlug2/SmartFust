@@ -1,14 +1,14 @@
 import smartfust as sf
 
 
-texture1 = sf.load_texture(r"smartfust/rsc/celeste.png", smoothscale=0.1)
+#texture1 = sf.load_texture(r"smartfust/rsc/celeste.png", smoothscale=0.1)
 
 dic = {
     0: sf.Label((100, 50), (60, 30), "Label", (0, 0, 0), colors=[(0, 255, 255), (255, 255, 0)], text_height=15),
     1: sf.Button((100, 100), (100, 100), "Button QUIT", None, (255, 255, 255), colors=[(0, 0, 0), (255, 0, 0)], animation={"size": (2, 2), "color": 6, "duration": 10}, text_height=13),
     2: sf.Checkbox((100, 220), (50, 50), colors=[(0, 150, 150), (150, 150, 0)], borders=[3]),
     3: sf.Entry((100, 300), (200, 30), inner_text="click here to change"),
-    4: sf.TextureWidget((250, 100), (250, 150), texture1, colors=[(255, 0, 0)]),
+    #4: sf.TextureWidget((250, 100), (250, 150), texture1, colors=[(255, 0, 0)]),
     5: sf.Slider((400, 300), (100, 30)),
     6: sf.List((400, 100), (100, 30))
 }

@@ -33,7 +33,7 @@ class Widget:
     @property
     def dims(self):
         return self.width, self.height
-    
+
     @property
     def corners(self):
         return (
@@ -54,7 +54,7 @@ class Widget:
 
     def animate(self, state):
         return
-    
+
     def on_click_animation(self, state):
         return
 
@@ -74,10 +74,10 @@ class TextureWidget(Widget):
                  borders=[3]):
         super().__init__(pos, dims, colors, borders)
         self.texture = texture
-    
+
     def set_texture(self, texture):
         self.texture = texture
-    
+
 
 class TextWidget(Widget):
     def __init__(self,
@@ -126,16 +126,16 @@ class Button(TextWidget):
         self.animation = animation
         if "duration" in animation:
             self.max_anim = animation["duration"]
-    
+
     def set_hover_animation(self, type: dict):
         self.animation = type
-    
+
     def animate(self, state: int):
         if state == 1 and self.animation_tick >= self.max_anim:
             return
         if state == -1 and self.animation_tick <= 0:
             return
-        
+
         sign = state
         if "size" in self.animation:
             addx, addy = self.animation["size"]
@@ -153,13 +153,13 @@ class Button(TextWidget):
             for color in self.colors:
                 color.add(dx)
         self.animation_tick += sign
-    
+
     def on_click_animation(self, state):
-        if state == True or (state == False and self.clicked):
+        if state or (not state and self.clicked):
             for color in self.colors:
                 color.invert()
             self.need_update = True
-        
+
         self.clicked = state
 
 class Checkbox(Widget):
@@ -171,20 +171,20 @@ class Checkbox(Widget):
     def switch_state(self):
         self.state = not self.state
         self.need_update = True
-    
+
     def animate(self, state: int):
         if state == 1 and self.animation_tick >= self.max_anim:
             return
         if state == -1 and self.animation_tick <= 0:
             return
-        
+
         sign = state
         add = 3
         dx = add * sign
         for color in self.colors:
             color.add(dx)
         self.animation_tick += sign
-    
+
     def on_click(self):
         self.switch_state()
 
@@ -218,7 +218,7 @@ class Entry(Widget):
     def update_tick(self) -> None:
         self.cursor_state = self.tick % 30 < 15
         self.tick += 1
-    
+
     def add_char(self, char: str) -> None:
         self.inner_text = self.inner_text[:self.cursorx] + char + self.inner_text[self.cursorx:]
         self.cursorx += 1
@@ -238,7 +238,7 @@ class Entry(Widget):
 
     def get_visible(self) -> str:
         return self.inner_text[self.scrollx:]
-    
+
 
 class AddonWidget(Widget):
     def __init__(self, pos, dims, addon_pos, addon_dims, colors=[BLACK, WHITE], borders=[3]):
@@ -246,9 +246,9 @@ class AddonWidget(Widget):
         self.addon_surface = None
         self.addon_posx, self.addon_posy = addon_pos
         self.addon_width, self.addon_height = addon_dims
-    
+
     def on_addon_click(self, mouse_pos): return
-    
+
     @property
     def addon_corners(self):
         return (
@@ -270,27 +270,31 @@ class AddonWidget(Widget):
     @property
     def addon_dims(self) -> tuple:
         return self.addon_width, self.addon_height
-    
+
     @property
     def addon_pos(self) -> tuple:
         return self.addon_posx, self.addon_posy
-        
+
 class Slider(AddonWidget):
-    def __init__(self, pos, dims, range=(0, 100), text_height=None, colors=[BLACK, WHITE], borders=[3]):
+    def __init__(self, pos, dims, range=(0, 100), default_value=None, text_height=None, bar_text_fg=BLACK, colors=[BLACK, WHITE], borders=[3]):
         ad_dims = dims
         ad_pos = (pos[0], pos[1] - dims[1])
         super().__init__(pos, dims, ad_pos, ad_dims, colors, borders)
 
         if not text_height:
             text_height = self.height // 2
+        self.bar_text_fg = bar_text_fg
         self.text_height = text_height
         self.min, self.max = range
-        self.value = self.max // 2
+        self.drange = self.max - self.min
+        if not default_value:
+            default_value = (self.max + self.min) // 2
+        self.value = default_value
         self.dx = self.width / self.max
         self.bar_width = 20
         self.bar_x = 0
         self.set_pos_from_value(self.value)
-    
+
     @property
     def slidebar_rect(self):
         x1 = self.posx + self.bar_x
@@ -298,7 +302,7 @@ class Slider(AddonWidget):
         y1 = self.posy
         y2 = self.posy + self.height
         return x1, x2, y1, y2
-    
+
     def get_mousex_ratio(self, mouse_x: int) -> float:
         relative_mousex = mouse_x - (self.posx + self.tot_border + self.bar_width // 2)
         tot_width = self.width - (self.tot_border * 2 + self.bar_width)
@@ -311,11 +315,11 @@ class Slider(AddonWidget):
 
     def set_pos_to_mouse(self, mousex: int):
         ratio = self.get_mousex_ratio(mousex)
-        self.value = int(self.max * ratio)
+        self.value = int(self.drange * ratio) + self.min
         self.set_pos_from_value(self.value)
-    
+
     def set_pos_from_value(self, value: int):
-        ratio = value / self.max
+        ratio = (value - self.min) / self.drange
         tot = self.width - (self.tot_border * 2 + self.bar_width)
         self.bar_x = tot * ratio # TODO : généraliser
 
@@ -337,7 +341,7 @@ class List(AddonWidget):
         self.scroll_y = 0
         self.list_shown = False
         self.current_value = self.values[self.y]
-    
+
     def on_addon_click(self, mouse_pos: tuple):
         if not mouse_in_box(mouse_pos, self.addon_corners):
             return False
@@ -347,7 +351,7 @@ class List(AddonWidget):
         self.set_y(self.scroll_y + idx)
         self.scroll_y = max(0, min(self.y - self.max_visible + 3, len(self.values) - self.max_visible))
         return True
-    
+
     @property
     def corners(self):
         if not self.list_shown:
@@ -359,14 +363,14 @@ class List(AddonWidget):
             self.posy,
             self.posy + self.height + self.addon_height
         )
-    
+
     def set_y(self, y: int):
         self.y = y
         self.current_value = self.values[self.y]
 
     def on_click(self):
         self.list_shown = True
-    
+
     def move(self, side: int):
         self.set_y(max(0, min(self.y + side, len(self.values) - 1)))
         if self.y - self.scroll_y > self.max_visible - 1: # Scroll down
