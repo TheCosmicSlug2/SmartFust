@@ -1,4 +1,5 @@
-from pygame import event, MOUSEBUTTONUP, KEYDOWN, mouse, K_LEFT, K_RIGHT, K_UP, K_DOWN, K_BACKSPACE, K_RETURN, key, QUIT
+from pygame import event, MOUSEBUTTONUP, KEYDOWN, mouse, K_LEFT, K_RIGHT, K_UP, K_DOWN,\
+    K_BACKSPACE, K_RETURN, key, QUIT, K_DELETE
 
 # Events
 EXIT = 1
@@ -14,6 +15,7 @@ MOUSE_POS = 10
 KEYS = 11
 BACKSPACE = 12
 ENTER = 13
+DELETE = 14
 
 class InputManager:
     def __init__(self):
@@ -49,7 +51,8 @@ class InputManager:
             K_UP: UP,
             K_DOWN: DOWN,
             K_BACKSPACE: BACKSPACE,
-            K_RETURN: ENTER
+            K_RETURN: ENTER,
+            K_DELETE: DELETE
         }
 
         keys = key.get_pressed()

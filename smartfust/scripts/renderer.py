@@ -32,7 +32,7 @@ class Renderer:
             shadow_mult = shadow["mult"]
             dx = shadow_sign[0]
             dy = shadow_sign[1]
-            dic = {i: color for i, color in enumerate(colors)}
+            dic = dict(enumerate(colors))
             for row_idx, row in enumerate(array):
                 for column_idx, column in enumerate(row):
                     color = dic[column]
@@ -42,7 +42,7 @@ class Renderer:
                     dcolor = shadow_mult * (from_center_x * dx + from_center_y * dy)
                     color = clamp_rgb_add(color, dcolor)
 
-                    rect = Rect(column_idx * cell_width, row_idx * cell_height, cell_width, cell_height)
+                    rect = Rect(column_idx*cell_width, row_idx*cell_height, cell_width, cell_height)
                     draw.rect(self.bg, color, rect)
 
 

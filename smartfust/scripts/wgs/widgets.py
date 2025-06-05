@@ -247,7 +247,8 @@ class AddonWidget(Widget):
         self.addon_posx, self.addon_posy = addon_pos
         self.addon_width, self.addon_height = addon_dims
 
-    def on_addon_click(self, mouse_pos): return
+    def on_addon_click(self, mouse_pos):
+        return
 
     @property
     def addon_corners(self):
@@ -276,7 +277,16 @@ class AddonWidget(Widget):
         return self.addon_posx, self.addon_posy
 
 class Slider(AddonWidget):
-    def __init__(self, pos, dims, range=(0, 100), default_value=None, text_height=None, bar_text_fg=BLACK, colors=[BLACK, WHITE], borders=[3]):
+    def __init__(self,
+                 pos,
+                 dims,
+                 _range=(0, 100),
+                 default_value=None,
+                 text_height=None,
+                 bar_text_fg=BLACK,
+                 colors=[BLACK, WHITE],
+                 borders=[3]
+            ):
         ad_dims = dims
         ad_pos = (pos[0], pos[1] - dims[1])
         super().__init__(pos, dims, ad_pos, ad_dims, colors, borders)
@@ -285,7 +295,7 @@ class Slider(AddonWidget):
             text_height = self.height // 2
         self.bar_text_fg = bar_text_fg
         self.text_height = text_height
-        self.min, self.max = range
+        self.min, self.max = _range
         self.drange = self.max - self.min
         if not default_value:
             default_value = (self.max + self.min) // 2
@@ -349,7 +359,10 @@ class List(AddonWidget):
         relative_posy = mouse_pos[1] - (self.posy + self.height)
         idx = max(0, min(relative_posy // self.height, self.max_visible))
         self.set_y(self.scroll_y + idx)
-        self.scroll_y = max(0, min(self.y - self.max_visible + 3, len(self.values) - self.max_visible))
+        self.scroll_y = max(
+            0,
+            min(self.y - self.max_visible + 3, len(self.values) - self.max_visible)
+        )
         return True
 
     @property

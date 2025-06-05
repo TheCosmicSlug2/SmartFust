@@ -1,6 +1,7 @@
 from smartfust.scripts.wgs.widget_renderer import WidgetRenderer
-from smartfust.scripts.wgs.widgets import *
-from smartfust.scripts.input_manager import *
+from smartfust.scripts.wgs.widgets import Widget, Slider, Entry, Button, List
+from smartfust.scripts.input_manager import LEFTCLICK_UP, LEFTCLICK_DOWN, MOUSE_POS, LEFT,\
+    RIGHT, BACKSPACE, KEYS, DOWN, UP, ENTER
 from smartfust.scripts.physics import *
 
 
@@ -91,4 +92,4 @@ class WidgetManager:
 
         # Update cursor if current widget is entry
         if isinstance(self.focused_widget, Entry):
-            widget.surface = self.widget_renderer.get_widget_render(widget)
+            self.focused_widget.surface = self.widget_renderer.get_widget_render(widget)
