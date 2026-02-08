@@ -1,26 +1,29 @@
+from pygame import Surface
 from smartfust.scripts.colors.color import Color
 from smartfust.scripts.colors.color_list import BLACK, GREEN, WHITE
 from smartfust.scripts.physics import *
+from smartfust.scripts.param_types import POS, DIMS, RGB, Optional
 
 DEFAULT = 1
 
 class Widget:
     def __init__(
             self,
-            pos: tuple[int],
-            dims: tuple[int],
-            colors: list[tuple]=[BLACK, WHITE],
+            pos: POS,
+            dims: DIMS,
+            colors: list[RGB]=[BLACK, WHITE],
             borders: list[int]=[3]
             ):
         self.posx, self.posy = pos
         self.width, self.height = dims
         self.colors = [Color(color) for color in colors]
         self.borders = borders
-        self.surface = None
+        self.surface: Optional[Surface] = None
         self.need_update = True
         self.clicked = False
         self.animation_tick = 0
         self.max_anim = 5
+        self.is_visible = True
 
     @property
     def tot_border(self):
@@ -243,7 +246,7 @@ class Entry(Widget):
 class AddonWidget(Widget):
     def __init__(self, pos, dims, addon_pos, addon_dims, colors=[BLACK, WHITE], borders=[3]):
         super().__init__(pos, dims, colors, borders)
-        self.addon_surface = None
+        self.addon_surface: Surface
         self.addon_posx, self.addon_posy = addon_pos
         self.addon_width, self.addon_height = addon_dims
 

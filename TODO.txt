@@ -1,0 +1,22 @@
+#Au lieu que ça soit une fenêtre à elle toute seule dont on peut accéder aux widgets que quand on la  ferme, #etc,
+#on peut faire :
+#game_display = pg.display, etc
+#Smartfust_display = sf.Display(game_display)
+#et après : on peut update le display avec :
+#Smartfust_display.update() 
+# update le fond (mettre par défaut à transparent si on veut pas que le smartfust display overwrite le reste), #les widgets, render sur display sans le flip, etc
+#et pour obtenir le dictionnaire : 
+#Smartfust_display.get_values()
+#pour cacher des widgets :
+#Smartfust_display.hide()
+#Smartfust_display.hide_all()
+#pour montrer, idem
+#pour changer les widgets, idem, "change_widget", etc
+#pouvoir garder une option mainloop pareil qu'avant
+#TOUS les display.flip se trouveront dans le file principal, dans une sous-fonction "update" ou juste dans la #boucle principale, pas dans les renderer
+#Les renderer devront juste blit sur le cache, et augmenter leurs ticks respectifs
+#Le clock tick se fera par idem le update ou le thread principal
+#ça permet de ne pas clock(FPS) plusieurs fois, et ne pas update le diplay plusieurs fois.
+#Le tout se fera dans le file principal
+
+Ajouter les barres latérales pour le scroll

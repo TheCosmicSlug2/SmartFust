@@ -2,9 +2,9 @@ from re import search, findall, DOTALL
 from subprocess import run
 from tempfile import NamedTemporaryFile
 import pygame as pg
-from scripts.input_manager import InputManager, EXIT, KEYS, LEFTCLICK_DOWN, \
+from smartfust.scripts.input_manager import InputManager, EXIT, KEYS, LEFTCLICK_DOWN, \
     MOUSE_POS, RIGHT, LEFT, UP, DOWN, DELETE
-from scripts.physics import mouse_in_rect
+from smartfust.scripts.physics import mouse_in_rect
 
 
 

@@ -1,15 +1,17 @@
+from tkinter import Label
+from typing import Optional
 from smartfust.scripts.wgs.widget_renderer import WidgetRenderer
-from smartfust.scripts.wgs.widgets import Widget, Slider, Entry, Button, List
+from smartfust.scripts.wgs.widgets import Widget, Slider, Entry, Button, List, Label
 from smartfust.scripts.input_manager import LEFTCLICK_UP, LEFTCLICK_DOWN, MOUSE_POS, LEFT,\
     RIGHT, BACKSPACE, KEYS, DOWN, UP, ENTER
 from smartfust.scripts.physics import *
 
 
 class WidgetManager:
-    def __init__(self, widgets: dict[int: Widget]):
+    def __init__(self, widgets: dict[int, Widget]):
         self.widgets = widgets
         self.widget_renderer = WidgetRenderer()
-        self.hover_widget = None
+        self.hover_widget: Optional[Widget] = None
         self.focused_widget = None
         self.on_exit = False
 
@@ -93,3 +95,23 @@ class WidgetManager:
         # Update cursor if current widget is entry
         if isinstance(self.focused_widget, Entry):
             self.focused_widget.surface = self.widget_renderer.get_widget_render(widget)
+    
+    def change_widget(self, widget_id, new_text):
+        widget = self.widgets[widget_id]
+        if isinstance(widget, Label):
+            widget.text = new_text
+            widget.need_update = True
+    
+    def hide_widget(self, widget_id):
+            self.widgets[widget_id].is_visible = False
+        
+    def hide_all_widgets(self):
+        for widget_id in self.widgets:
+            self.hide_widget(widget_id)
+
+    def show_widget(self, widget_id):
+            self.widgets[widget_id].is_visible = True
+        
+    def show_all_widgets(self):
+        for widget_id in self.widgets:
+            self.show_widget(widget_id)

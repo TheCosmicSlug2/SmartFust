@@ -1,0 +1,83 @@
+
+
+Smarfust is a way to easily create menus to interact with in a game.
+
+There are two ways to use smartfust:
+
+1 - In mainloop mode (there will be only smartfust widgets, no way to create other interactions on the side)
+2 - In update mode (note : mainloop mode uses update mode)
+
+In update mode, the pygame screen is shared beetween the main program (your game for example) and smartfust
+
+- You can define a list of widgets that smartfust will make appear (for example : )
+
+dic = {
+    2: sf.Checkbox((100, 220), (50, 50), colors=[(0, 150, 150), (150, 150, 0)], borders=[3]),
+    3: sf.Entry((100, 300), (200, 30), inner_text="click here to change"),
+    5: sf.Slider((400, 300), (100, 30)),
+    6: sf.List((400, 100), (100, 30))
+}
+
+
+- then create the pygame screen :
+
+screen = pg.diplay.set_mode(blabla)
+
+- then create the smartfust screen :
+
+sf_screen = sf.Diplay(screen)
+
+
+- and in your code, do :
+
+def main():
+  # Your Game code
+  while game_running :
+    # your game logic
+
+    sf_display.update()
+    
+    # the reste of your game logic
+    pg.diplay.flip()
+    clock.tick(30)
+
+note : sf_display.update will NOT flip the screen, it will only create a cache surface will all the widgets, 
+then blit this surface on the screen (again, without flipping the screen).
+So if you create a non-transparent background for the sf_display, then calling sf_display.update() will hide all the things you could have drawn on screen prior, so it's best to call sf_display.update() before drawing anything on the screen, so it won't be hidden.
+
+
+
+So why not only use "update" and not "mainloop" ?
+Because, if you just want a menu that closes before the real game, there's no need creating a complex
+loop to handle screen flipping, event catching, etc.
+
+You can just :
+
+widgets_list = [...]
+def main():
+  sf_display = sf.Display(dims=(400, 400))
+  sf.display.add_widgets(widgets_list)
+  sf.diplay.mainloop()
+
+And the job is done !
+
+note : this time : mainloop() WILL update the screen, it will basically do everything
+
+
+
+You can also use smartfust for printing game data on the screen during the game, like FPS and stuff
+For this, you need to update the widgets at each frame.
+
+
+
+List of smartfust.diplay functions :
+
+widget_values() # returns a dictionary of all the widgets and the value they currently have
+set_font() # Set the font used by all the widgets
+set_bg() # Set the background (rgb, custom, chessboard), also shadow type (sign, mult)
+change_widget() # Change a widget's text
+set_title() # Set window title
+hide_widget() / hide_all_widgets()
+show_widget() / show_all_widgets()
+update()
+mainloop()
