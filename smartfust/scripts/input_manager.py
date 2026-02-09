@@ -22,10 +22,10 @@ class InputManager:
         self.events = {}
         self.last_events = {}
 
-    def get_events(self):
+    def get_events(self, pg_events):
         # Pygame events
         self.events[KEYS] = []
-        for e in event.get():
+        for e in pg_events:
             if e.type == QUIT:
                 self.events[EXIT] = True
             if e.type == MOUSEBUTTONUP:
@@ -35,7 +35,7 @@ class InputManager:
                     self.events[RIGHTCLICK_UP] = e.pos
             if e.type == KEYDOWN:
                 if e.unicode:
-                    self.events[KEYS] = e.unicode
+                    self.events[KEYS].append(e.unicode)
 
         # Mouse pos and click
         mouse_pressed = mouse.get_pressed()

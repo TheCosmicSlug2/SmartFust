@@ -52,7 +52,8 @@ def main():
 
     running = True
     while running:
-        for event in pg.event.get():
+        events = pg.event.get()
+        for event in events:
             if event.type == pg.QUIT:
                 running = False
         
@@ -61,7 +62,7 @@ def main():
         sf_display.change_widget(0, f"fps : {round(clock.get_fps(), 2)}")
         player.update()
         screen.fill((255, 255, 255))
-        sf_display.update()
+        sf_display.update(events)
         screen.blit(player.texture, (player.pos))
 
         pg.display.flip()

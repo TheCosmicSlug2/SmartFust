@@ -94,7 +94,7 @@ class WidgetManager:
 
         # Update cursor if current widget is entry
         if isinstance(self.focused_widget, Entry):
-            self.focused_widget.surface = self.widget_renderer.get_widget_render(widget)
+            self.focused_widget.surface = self.widget_renderer.get_widget_render(self.focused_widget)
     
     def change_widget(self, widget_id, new_text):
         widget = self.widgets[widget_id]

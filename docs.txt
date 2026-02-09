@@ -68,7 +68,14 @@ note : this time : mainloop() WILL update the screen, it will basically do every
 You can also use smartfust for printing game data on the screen during the game, like FPS and stuff
 For this, you need to update the widgets at each frame.
 
+WARNING : DO THIS TOO :
 
+events = pg.event.get()
+for event in events:
+  # Game logic
+sf_display.update(events)
+
+Because if you don't give update() the last pygame events, it will behave incorrectly (believe me this bug drove me nuts) because of the weird fact that pygame erases all events when calling pg.event.get().
 
 List of smartfust.diplay functions :
 

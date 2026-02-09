@@ -45,8 +45,8 @@ class Display:
     def add_widgets(self, widgets: dict[int, Widget]):
         self.widget_manager.widgets.update(widgets) # "update" ici dans le cadre d'un dictionnaire
     
-    def update(self):
-        events = self.input_manager.get_events()
+    def update(self, pg_events):
+        events = self.input_manager.get_events(pg_events)
         if EXIT in events:
             self.output_code = GLOBAL_QUIT
             return False
@@ -67,7 +67,8 @@ class Display:
     def mainloop(self) -> None:
         running = True
         while running:
-            running = self.update()
+            events = pg.event.get()
+            running = self.update(events)
             pg.display.flip()
             self.clock.tick(30)
 
