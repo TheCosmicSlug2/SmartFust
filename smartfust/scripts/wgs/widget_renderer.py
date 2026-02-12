@@ -1,4 +1,5 @@
 from pygame import draw, font, Rect, SRCALPHA, Surface
+from smartfust.scripts.colors.color_list import GREY
 from smartfust.scripts.wgs.widgets import Widget, Button, TextureWidget,\
     AddonWidget, Checkbox, Entry, Label, Slider, List
 
@@ -119,4 +120,9 @@ class WidgetRenderer:
                     (widget.tot_border, y * widget.height + (widget.height - text_render.get_height()) // 2)
                 )
                 y += 1
+
+            # Scrollar
+            surface = Surface(widget.scrollbar.dims)
+            surface.fill((GREY))
+            widget.addon_surface.blit(surface, widget.scrollbar.pos)
         return outer_surface

@@ -336,6 +336,40 @@ class Slider(AddonWidget):
         tot = self.width - (self.tot_border * 2 + self.bar_width)
         self.bar_x = tot * ratio # TODO : généraliser
 
+
+class ScrollBar:
+    def __init__(self, addon_width, max_idx, max_height) -> None:
+        self.width = 20
+        self.posx = addon_width - 20
+        self.posy = 0
+        self.height = 40
+        self.max_height = max_height
+        self.usable_y = max_height - self.height
+        self.max_idx = max_idx
+
+    def get_value_idx(self):
+        n_float = (self.posy * self.max_idx) / self.usable_y
+        n = int(n_float)
+        return n
+    
+    def clamp_height(self):
+        self.posy = max(0, min(self.posy, self.usable_y))
+    
+    def set_from_list_idx(self, list_idx):
+        self.posy = (list_idx * self.usable_y) / self.max_idx
+    
+    @property
+    def corners(self):
+        return (self.posx, self.posx + self.width, self.posy, self.posy + self.height)
+    
+    @property
+    def dims(self):
+        return self.width, self.height
+
+    @property
+    def pos(self):
+        return self.posx, self.posy
+
 class List(AddonWidget):
     def __init__(self, pos, dims, text_height=None, values=[], colors=[BLACK, WHITE], borders=[3]):
         self.max_visible = 5
@@ -354,19 +388,45 @@ class List(AddonWidget):
         self.scroll_y = 0
         self.list_shown = False
         self.current_value = self.values[self.y]
+        self.scrollbar_clicked = False
+        self.scrollbar = ScrollBar(
+            self.addon_dims[0],
+            len(self.values) - 1,
+            self.addon_dims[1]
+        )
+        self.scrollbar_surface = None
 
-    def on_addon_click(self, mouse_pos: tuple):
-        if not mouse_in_box(mouse_pos, self.addon_corners):
-            return False
+
+    def check_addon_click(self, mouse_pos: tuple):
+        
         # Find relative mouse pos
+        relative_posx = mouse_pos[0] - self.posx
         relative_posy = mouse_pos[1] - (self.posy + self.height)
+        collision_addon = mouse_in_box(mouse_pos, self.addon_corners)
+        collision_scrollbar = mouse_in_box((relative_posx, relative_posy), self.scrollbar.corners)
+        
+        if collision_scrollbar:
+            self.scrollbar_clicked = True
+            # scrollbar_click restera vrai tant qu'on aura pas laché le leftclick
+            # (voir condition else dans update_states de List)
+
+        if self.scrollbar_clicked:
+            self.need_update = True
+            self.scrollbar.posy = relative_posy - (self.scrollbar.height / 2)
+            self.scrollbar.clamp_height()
+            self.set_y(self.scrollbar.get_value_idx())
+            self.update_scroll()
+            return
+
+        # La logique de la scrollbar a été faite, on passe à la logique du choix des valeurs
+        if not collision_addon:
+            return
+        
+        self.list_shown = False
+
         idx = max(0, min(relative_posy // self.height, self.max_visible))
         self.set_y(self.scroll_y + idx)
-        self.scroll_y = max(
-            0,
-            min(self.y - self.max_visible + 3, len(self.values) - self.max_visible)
-        )
-        return True
+        self.update_scroll()
 
     @property
     def corners(self):
@@ -378,6 +438,12 @@ class List(AddonWidget):
             self.posx + self.width,
             self.posy,
             self.posy + self.height + self.addon_height
+        )
+
+    def update_scroll(self):
+        self.scroll_y = max(
+            0,
+            min(self.y - self.max_visible + 3, len(self.values) - self.max_visible)
         )
 
     def set_y(self, y: int):
@@ -393,6 +459,7 @@ class List(AddonWidget):
             self.scroll_y += 1
         if self.y - self.scroll_y < 0: # Scroll up
             self.scroll_y -= 1
+        self.scrollbar.set_from_list_idx(self.y)
 
     def get_visible(self):
         values = self.values[self.scroll_y:self.scroll_y + self.max_visible]

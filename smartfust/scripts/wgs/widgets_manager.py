@@ -76,9 +76,9 @@ class WidgetManager:
             if ENTER in events and not ENTER in last_events:
                 self.focused_widget.list_shown = False
             if LEFTCLICK_DOWN in events and self.focused_widget.list_shown:
-                if self.focused_widget.on_addon_click(events[MOUSE_POS]):
-                    self.focused_widget.list_shown = False
-                    self.focused_widget.need_update = True
+                self.focused_widget.check_addon_click(events[MOUSE_POS])
+            else:
+                self.focused_widget.scrollbar_clicked = False
 
         # Check if button is clicked
         if isinstance(self.focused_widget, Button) and self.focused_widget.return_value == "quit":
