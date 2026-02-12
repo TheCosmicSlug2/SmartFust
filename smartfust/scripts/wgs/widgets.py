@@ -64,6 +64,9 @@ class Widget:
     def on_click(self):
         return
 
+    def get_value(self):
+        return None
+
     @property
     def can_animate(self):
         return 0 < self.animation_tick < self.max_anim
@@ -129,6 +132,9 @@ class Button(TextWidget):
         self.animation = animation
         if "duration" in animation:
             self.max_anim = animation["duration"]
+    
+    def get_value(self):
+        return self.clicked
 
     def set_hover_animation(self, type: dict):
         self.animation = type
@@ -170,6 +176,9 @@ class Checkbox(Widget):
         super().__init__(pos, dims, colors, borders)
         self.check_color = Color(check_color)
         self.state = False
+    
+    def get_value(self):
+        return self.state
 
     def switch_state(self):
         self.state = not self.state
@@ -214,6 +223,9 @@ class Entry(Widget):
     @property
     def cursor_at_end(self):
         return self.cursorx == len(self.inner_text)
+    
+    def get_value(self):
+        return self.inner_text
 
     def move(self, side: int) -> None:
         self.cursorx = max(0, min(self.cursorx + side, len(self.inner_text)))
@@ -316,6 +328,9 @@ class Slider(AddonWidget):
         y2 = self.posy + self.height
         return x1, x2, y1, y2
 
+    def get_value(self):
+        return self.value
+
     def get_mousex_ratio(self, mouse_x: int) -> float:
         relative_mousex = mouse_x - (self.posx + self.tot_border + self.bar_width // 2)
         tot_width = self.width - (self.tot_border * 2 + self.bar_width)
@@ -395,6 +410,9 @@ class List(AddonWidget):
             self.addon_dims[1]
         )
         self.scrollbar_surface = None
+    
+    def get_value(self):
+        return self.current_value
 
 
     def check_addon_click(self, mouse_pos: tuple):

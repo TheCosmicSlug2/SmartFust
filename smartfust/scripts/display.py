@@ -91,18 +91,7 @@ class Display:
     def widget_values(self) -> dict:
         dic = {}
         for widget_id, widget in self.widget_manager.widgets.items():
-            value = None
-            if isinstance(widget, Button):
-                value = widget.clicked
-            if isinstance(widget, Checkbox):
-                value = widget.state
-            if isinstance(widget, Entry):
-                value = widget.inner_text
-            if isinstance(widget, List):
-                value = widget.current_value
-            if isinstance(widget, Slider):
-                value = widget.value
-            dic[widget_id] = value
+            dic[widget_id] = widget.get_value()
         return dic
     
     def set_title(self, new_title):
