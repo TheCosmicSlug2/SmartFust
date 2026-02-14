@@ -25,6 +25,8 @@ class WidgetManager:
     def update_states(self, events: dict, last_events: dict) -> None:
         self.hover_widget = None
         for widget in self.widgets.values():
+            if not widget.is_visible:
+                continue
             if mouse_in_box(events[MOUSE_POS], widget.corners):
                 self.hover_widget = widget
                 widget.animate(1)

@@ -1,3 +1,4 @@
+from tkinter import W
 from pygame import cursors, time, Surface, draw, Rect, mouse, \
     SYSTEM_CURSOR_ARROW, SYSTEM_CURSOR_IBEAM, SYSTEM_CURSOR_HAND, display
 import pygame as pg
@@ -20,7 +21,9 @@ class Renderer:
         self.cache = pg.Surface(self.screen_size, pg.SRCALPHA)
 
     def set_bg(self, _type, dims, colors, array, image_path, shadow) -> None:
-        self.bg = Surface(self.screen_size)
+        self.bg = Surface(self.screen_size, pg.SRCALPHA)
+        if _type == "none":
+            return
         if _type == "rgb":
             self.bg.fill(colors)
         if _type == "chessboard":
@@ -61,7 +64,7 @@ class Renderer:
 
     def render_all(self, widgets: dict) -> None:        
         self.cache = pg.Surface(self.screen_size, pg.SRCALPHA)
-        self.cache.fill((255, 255, 255))  # TODO A changer si c'est transparent 
+        # self.cache.fill((255, 255, 255))  # TODO A changer si c'est transparent 
         if self.bg:
             self.cache.blit(self.bg, (0, 0)) # TODO A changer si c'est transparent
         for widget in widgets.values():
